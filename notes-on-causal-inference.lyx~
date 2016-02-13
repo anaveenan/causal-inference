@@ -1,0 +1,901 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Causal Inference - Notes From Mastering Metrics
+\end_layout
+
+\begin_layout Section*
+The Basics
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Key Idea
+\series default
+: To understand the causal impact of 
+\begin_inset Formula $X$
+\end_inset
+
+ on 
+\begin_inset Formula $Y$
+\end_inset
+
+, it is not enough to make comparisons between those who have 
+\begin_inset Formula $X$
+\end_inset
+
+ and not (i.e.
+ observational data) due to selection bias.
+ When we say correlation 
+\begin_inset Formula $!=$
+\end_inset
+
+ causation, what we really mean is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\underbrace{\text{Difference in Group Mean}}_{\text{correlation study}}=\underbrace{\text{Average Causal Effect}}_{\text{causal inference}}+\text{Selection Bias}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To formalize this, let's use the following notation
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+D_{i}=\begin{cases}
+1 & \text{if treated}\\
+0 & \text{if not treated}
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+An example of 
+\begin_inset Formula $D$
+\end_inset
+
+ could be whether a particular subject has a college degree or not.
+ Note, 
+\begin_inset Formula $D$
+\end_inset
+
+ (the treatment assignment) can be engineered by an engineer, or that the
+ environment simply cause people to 
+\begin_inset Quotes eld
+\end_inset
+
+self select
+\begin_inset Quotes erd
+\end_inset
+
+ into a treatment group.
+ Let 
+\begin_inset Formula $Y$
+\end_inset
+
+ to the metric of interest, e.g.
+ Average yearly income, then our question is around whether those who went
+ to college actually earns a higher wage.
+ The important thing to realize here is that for each person, there is only
+ one realization -- you either went to college or you do not, and only one
+ path is realized, so only one 
+\begin_inset Formula $Y$
+\end_inset
+
+ is observed.
+ However, in abstract terms, each person (at least in theory) can have two
+ outcomes, which are the wage they would earn if they went to college 
+\begin_inset Formula $Y(D=1)$
+\end_inset
+
+ v.s.
+ had they not gone to college 
+\begin_inset Formula $Y(D=0)$
+\end_inset
+
+.
+ The unobserved, alternative outcome that an individual has not realized
+ is called 
+\begin_inset Quotes eld
+\end_inset
+
+
+\series bold
+counterfactual
+\series default
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+ If we knew what it is, causual inference would have been pretty easy :)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Despite the fact that we only get to observe one outcome, we might still
+ want to think how we would estimate the causal effect if counterfactual
+ is available to us.
+ Let us define a few more notation:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+Y(i|D=j)=Y_{ij}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+which 
+\begin_inset Formula $D\in\left\{ 0,1\right\} $
+\end_inset
+
+ represent whether a user was treated (1) or not (0) in reality, and 
+\begin_inset Formula $i\in\left\{ 0,1\right\} $
+\end_inset
+
+ represents the scenarios, 1 had the subject been treated, and 0, had the
+ subject not been treated.
+ For someone who is treated, the counterfactual would be 
+\begin_inset Formula $Y_{01}$
+\end_inset
+
+.
+ For someone who is untreated, the counterfactual would be 
+\begin_inset Formula $Y_{10}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Given that we only have the observed outcomes, the typical thing to do is
+ to directly compare them, namely 
+\begin_inset Formula $Y_{11}-Y_{00}$
+\end_inset
+
+.
+ With large sample size, we would naturally look at 
+\begin_inset Formula $Avg(Y_{11})-Avg(Y_{00})$
+\end_inset
+
+, but this can be problematic, because what we are really going after is
+ the causal impact of the 
+\series bold
+treated
+\series default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\underbrace{E\left[Y_{11}-Y_{00}\right]}_{\text{what we have at hand}} & = & E\left[Y_{11}\left(-Y_{01}+Y_{01}\right)-Y_{00}\right]\\
+ & = & \underbrace{E\left[Y_{11}-Y_{01}|D=1\right]}_{\text{the causal impact of treated we are really after}}+E\left[Y_{01}-Y_{00}\right]
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Notice that 
+\begin_inset Formula $E[Y_{11}-Y_{01}]$
+\end_inset
+
+ is the average causal effect of the 
+\series bold
+treated group, 
+\series default
+and it is a quantity that we are interested in.
+ However, when we simply compare the realized outcome of the treated against
+ the untreated, we see that there is an extra term 
+\begin_inset Formula $E\left[Y_{01}-Y_{00}\right]$
+\end_inset
+
+ lurking, and this can be thought of exactly as the 
+\series bold
+selection bias
+\series default
+.
+ Why? in the absence of 
+\begin_inset Formula $Y_{01}$
+\end_inset
+
+, we are trying use 
+\begin_inset Formula $Y_{00}$
+\end_inset
+
+ as a proxy for it.
+ However, when this proxy is imperfect (e.g.
+ the subject who have gone to college is biologically smart than those who
+ didn't, so even if they had not gone to college, they might make more),
+ the discrepancy will mess up our estimation.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can reason exactly & symmetrically to estimate the causal impact for
+ the untreated group:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\underbrace{E\left[Y_{11}-Y_{00}\right]}_{\text{what we have at hand}} & = & E\left[Y_{11}\left(-Y_{10}+Y_{10}\right)-Y_{00}\right]\\
+ & = & E\left[Y_{11}-Y_{10}\right]+\underbrace{E\left[Y_{10}-Y_{00}|D=0\right]}_{\text{the causal impact of untreated is what we are really after}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here, we would like to use 
+\begin_inset Formula $Y_{10}$
+\end_inset
+
+ to estimate the causal impact, but all we have is 
+\begin_inset Formula $Y_{11}$
+\end_inset
+
+ as a proxy.
+ And again, it's entirely reasonable that 
+\begin_inset Formula $Y_{11}$
+\end_inset
+
+ would be an overestimate of 
+\begin_inset Formula $Y_{10}$
+\end_inset
+
+ due to intelligence difference.
+ Therefore, the theme of 
+\series bold
+average casual effect = our poor estimate - selection bias
+\series default
+ is a consistent theme.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+With a bit of Algebra
+\series bold
+ 
+\series default
+(see Northwestern paper)
+\series bold
+, 
+\series default
+we can show that the average causal impact (combining the treated and the
+ untreated) is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\mu & = & E[Y_{11}-Y_{00}]-\left\{ \underbrace{E\left[Y_{00}-Y_{01}\right]}_{\text{substitute - counterfactual}}P(D=1)+\underbrace{E\left[Y_{11}-Y_{10}\right]}_{\text{substitute -counterfactual}}P(D=0)\right\} 
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Therefore, the insight here is that we would only get 
+\begin_inset Formula $\mu$
+\end_inset
+
+right when substitutes of the counterfactuals are 
+\begin_inset Formula $0$
+\end_inset
+
+, a very difficult task with observational data.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Are we hopeless then? Not so much, there are ways where we can control or
+ even eliminate selection bias, and we will discuss methods in the following
+ sections to minimize the impact of selection bias.
+ First, let's talk about the golden standard, which is randomized controlled
+ experiment, where assignement is done randomly (so there is no chance for
+ selection bias).
+\end_layout
+
+\begin_layout Section*
+Randomized Controlled Experiment
+\end_layout
+
+\begin_layout Standard
+In the case where treatment assignment is randomized, it means that the
+ treatment 
+\begin_inset Formula $D$
+\end_inset
+
+ and the outcome 
+\begin_inset Formula $Y$
+\end_inset
+
+ are independent (the assignment is purely done at random, and no information
+ from 
+\begin_inset Formula $Y$
+\end_inset
+
+ is taken into account).
+ Mathematically, this means that 
+\begin_inset Formula $E[Y|D]=E[Y]$
+\end_inset
+
+, which means that the selection bias term will vanish.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+E[Y_{00}-Y_{01}] & = & E[Y(0|D=0)]-E\left[Y(0|D=1)\right]\\
+ & = & E[Y(0)-Y(0)]=0
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Similarly
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+E[Y_{11}-Y_{10}] & = & E[Y(1|D=1)]-E\left[Y(1|D=0)\right]\\
+ & = & E[Y(1)-Y(1)]=0
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is the reason why randomized controlled experiment is the gold statement,
+ because we are gaurantee that there will be no selection bias, this means
+ that:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\mu=E\left[Y_{11}-Y_{00}\right]=E\left[Y_{11}\right]-E\left[Y_{00}\right]\approx Avg(Y_{11})-Avg(Y_{00})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+comparing the average outcome of those who are treated to the average outcomes
+ of those who are untreated will give us the 
+\series bold
+right answer
+\series default
+! Unfortunately, we don't always live in a world where randomized controlled
+ experiment is possible, so we must have other tools in our reportorie to
+ battle 
+\series bold
+selection bias
+\series default
+.
+\end_layout
+
+\begin_layout Section*
+Regression as Control/Matching (Psuedo Ceteris Paribus)
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Key idea
+\series default
+: Regression has been around for a long time, but it's not until in the
+ past decades that it is being used as a tool for 
+\series bold
+control / matchmaking
+\series default
+ in the context of causal inference.
+ When observational data is all we have, a typical approach that is used
+ to remove selection bias is to 
+\series bold
+match
+\series default
+ people into specific sub-groups so that all of the qualities about the
+ users are the same, except the treatment variable that we care about.
+ In such setting, we can say that all else are equal, except the treatment.
+ In that specific case, we can calculate the difference of control and treatment
+, and see if the delta persisted across group to measure the average causal
+ impact.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+More concretely, let's use the example of the impact of private/public college
+ educaiton on wage.
+ Students with different abilities might have a direct impact on how much
+ they will be able to make in the future as well as the type of schools
+ they would apply to (perhaps they apply to more elite private universities).
+ As a result, when we are trying to understand the impact of public v.s.
+ private school, we cannot simply compare the averages.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For example, in order to control students' abilities, we might want to match
+ those who have similar SAT scores as well as the schools that they apply
+ to and admitted.
+ If we are lucky enough, we will be able to find enough examples for these
+ subgroups containing those who went to private & public school.
+ Finally, we would compare the difference in wage to observe what the difference
+ is.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is essentially the basic idea of regression.
+ The key ingredient in the regression recipe are
+\end_layout
+
+\begin_layout Itemize
+The dependent variable: in thise case, student's earnings in life
+\end_layout
+
+\begin_layout Itemize
+The 
+\series bold
+treatment
+\series default
+ variable: a dummy variable that indicates whether a student is in control
+ or treatment (e.g.
+ public v.s.
+ private)
+\end_layout
+
+\begin_layout Itemize
+A set of 
+\series bold
+control
+\series default
+ variables: These are variables about the users of which we might want to
+ 
+\begin_inset Quotes eld
+\end_inset
+
+control
+\begin_inset Quotes erd
+\end_inset
+
+ for before making the comparisons
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+Y_{i} & = & \alpha+\gamma I_{i}\left\{ \text{Treatment?}\right\} +\sum_{i=j}^{p}\beta_{j}X_{j}+\epsilon_{i}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The key here is that 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ captures the causal impact of our treatment, conditioning / controlling
+ on all the 
+\begin_inset Quotes eld
+\end_inset
+
+control
+\begin_inset Quotes erd
+\end_inset
+
+ variables that might vary among samples.
+\end_layout
+
+\begin_layout Subsection*
+Omitted Variable Bias
+\end_layout
+
+\begin_layout Standard
+Regression is a great tool to help us understand, within the group (for
+ a fixed 
+\begin_inset Formula $X_{j}'s$
+\end_inset
+
+), what is the causal impact 
+\begin_inset Formula $\gamma$
+\end_inset
+
+(average over all strata of 
+\begin_inset Formula $X_{j}$
+\end_inset
+
+ combinations), but the estimate of 
+\begin_inset Formula $\gamma$
+\end_inset
+
+ is only as good as how we are able to control variable bias.
+ In many cases, failure to include enough controls or the right controls
+ still leaves us with selectio nbias.
+ The regression version of the selection bias generated by inadequate controls
+ is called 
+\series bold
+omitted variables bias (OVB), 
+\series default
+and it's one of the most important ideas to keep in mind.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To make things more explicitly, consider the example where we have only
+ one control variable 
+\begin_inset Formula $A$
+\end_inset
+
+, and we are trying to understand the impact of 
+\begin_inset Quotes eld
+\end_inset
+
+not
+\begin_inset Quotes erd
+\end_inset
+
+ including it in the regression as a control.
+ We can write the two scenarios as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+Y_{i} & = & \alpha^{l}+\beta^{l}I\left\{ \text{Treatment?}\right\} +\gamma A_{i}+\epsilon_{i}^{l}\\
+Y_{i} & = & \alpha^{s}+\beta^{s}I\left\{ \text{Treatment?}\right\} +\epsilon_{i}^{s}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The idea here is for us to understand the difference between the two 
+\begin_inset Formula $\beta s$
+\end_inset
+
+.
+ With some mathematical derivation (which we will show later), the key takeaway
+ here is that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\text{Treatment Effect in Long} & = & \text{Treatment Effect in Short+}\\
+ &  & (\text{Relationship between omitted and included})\times\left(\text{Effect of omitted in Long}\right)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It's a bit convoluted, but the best way to think about it is that:
+\end_layout
+
+\begin_layout Itemize
+Treatment itself could affect 
+\begin_inset Formula $Y$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The omitted variable can directly affect Y but ALSO Treatment
+\end_layout
+
+\begin_layout Standard
+The rough idea is that had the omitted variable had been present, then we
+ will be able to quantity quite clearly the contribution of both 
+\begin_inset Formula $I$
+\end_inset
+
+ and 
+\begin_inset Formula $A$
+\end_inset
+
+ to 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+ However, in the absence of 
+\begin_inset Formula $A$
+\end_inset
+
+, all the credits might be given to 
+\begin_inset Formula $I$
+\end_inset
+
+, and we might be overly optimistic of the causal effect of 
+\begin_inset Formula $I$
+\end_inset
+
+ on 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As an example, let's assume that being smart makes you more likely to apply
+ to elite private school, and going to private school makes you more likely
+ to earn a higher wage, then in the absence of the smartness variable, we
+ might see that smarter people tend to be more likely to go to private (they
+ self selected into that pool), and these people tend to make more because
+ BOTH they are smart and went to prviate school (the wage got an extra push
+ from not only going to private school but also being smart).
+ On the other hand, less intelligent people might have a smaller change
+ going to private school (they self selected into that group), and their
+ average wage might be lower, both because they went to public school but
+ also that they are not as intelligence.
+ When we only compare those who went v.s.
+ did not go to prviate school, we see that the wage gap is larger than what
+ it would have been had we included intelligence as one of the control variable.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As a result, the degree in which we are affected by OVB is bounded by:
+\end_layout
+
+\begin_layout Itemize
+The correlation between ommited and included
+\end_layout
+
+\begin_layout Itemize
+The impact of the omitted had we considered all the variables into account
+ (roughly speaking)
+\end_layout
+
+\begin_layout Standard
+To be more concrete, if we regress 
+\begin_inset Formula $A$
+\end_inset
+
+ onto 
+\begin_inset Formula $I\left\{ \text{treatment}\right\} $
+\end_inset
+
+ using the regression model 
+\begin_inset Formula $A=\pi_{0}+\pi_{1}I\left\{ \text{treatment?}\right\} +u_{i}$
+\end_inset
+
+, then 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+OVB & = & \beta^{l}-\beta^{s}\\
+ & = & \pi_{1}\times\gamma
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Regression Sensitivity Analysis
+\end_layout
+
+\begin_layout Standard
+The final key idea is that, given that we know how to quanity OVB, if we
+ know either 
+\begin_inset Formula $\pi_{1}$
+\end_inset
+
+ or 
+\begin_inset Formula $\gamma$
+\end_inset
+
+, and we know that both of them are small, then even if we ommited the particula
+r term, it's impact on our estimation on the causal impact of 
+\begin_inset Formula $I\left\{ \text{Treatment?}\right\} $
+\end_inset
+
+ should not be big.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We normally might not know either one of them, but if we can estimate them
+ and know that the correlation between the included & omitted are small,
+ then we shouldn't worry too much.
+\end_layout
+
+\end_body
+\end_document
