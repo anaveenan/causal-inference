@@ -1,6 +1,6 @@
 # Causal Inference Study Plan
 
-References:
+Useful References:
 
 * [Northwestern University Intro](http://faculty.wcas.northwestern.edu/~sha562/files/TeachMetricsPaperhomepage.pdf)
 * [Mastering Metrics](http://masteringmetrics.com/)
