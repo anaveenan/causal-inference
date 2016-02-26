@@ -1442,5 +1442,913 @@ A_{i} & = & \eta+\pi I\left\{ \text{Treatment?}\right\} +e_{i}
 QED.
 \end_layout
 
+\begin_layout Section*
+\noindent
+Instrumental Variable (IV)
+\end_layout
+
+\begin_layout Standard
+\noindent
+
+\series bold
+\color blue
+Key idea
+\series default
+: When the independent variable in the regression model 
+\begin_inset Formula $X$
+\end_inset
+
+ is 
+\series bold
+endogenous
+\series default
+ (i.e.
+ it is correlated with the error term 
+\begin_inset Formula $u$
+\end_inset
+
+), measuring the causal impact of 
+\begin_inset Formula $X$
+\end_inset
+
+ on 
+\begin_inset Formula $Y$
+\end_inset
+
+ using OLS will be biased & inconsistent:
+\end_layout
+
+\begin_layout Itemize
+\noindent
+
+\series bold
+\color blue
+Biased:
+\series default
+
+\begin_inset Formula $\quad$
+\end_inset
+
+
+\begin_inset Formula $E[\beta_{OLS}]\neq\beta_{TRUE}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\noindent
+
+\series bold
+\color blue
+Inconsistent:
+\begin_inset Formula $\quad$
+\end_inset
+
+
+\series default
+ 
+\begin_inset Formula $\beta_{OLS}\rightarrow_{not}\beta_{TRUE}$
+\end_inset
+
+ as 
+\begin_inset Formula $n\rightarrow\infty$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\noindent
+
+\color blue
+The idea of instrumental variable 
+\begin_inset Formula $Z$
+\end_inset
+
+ is that while it is directly affects the causal variable of interest 
+\begin_inset Formula $X$
+\end_inset
+
+ 
+\begin_inset Formula $(cov(X,Z)\neq0)$
+\end_inset
+
+, it is unrelated to the error term 
+\begin_inset Formula $(Cov(Z,u)=0)$
+\end_inset
+
+.
+ Therefore, by changing 
+\begin_inset Formula $Z$
+\end_inset
+
+, we will be able to affect 
+\begin_inset Formula $X$
+\end_inset
+
+, without the error terms interfering, so the change in 
+\begin_inset Formula $Y$
+\end_inset
+
+ is 'clean' and entirely due to the change in 
+\begin_inset Formula $X$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+\noindent
+Intuition
+\end_layout
+
+\begin_layout Standard
+Using the earnings-school example (i.e.
+ attending school more will increase earning).
+ Suppose a one unit change in the instrument 
+\begin_inset Formula $Z$
+\end_inset
+
+ is associated with 0.2 more years of schooling and with a $500 increase
+ in annual earnings.
+ This increase in earnings is a consequence of the indirect effect that
+ increase in 
+\begin_inset Formula $Z$
+\end_inset
+
+ led to increase in schooling which in turn increases income.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Then it follows that 0.2 years additional schooling are associated with a
+ $500 increase in earnings, so that a one year increase in schooling is
+ associated with a $500 / 0.2 = $2500 increase in earnings.
+ In mathematical notation, we are trying to do:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\beta_{IV} & = & \frac{dy/dz}{dx/dz}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+\noindent
+Schematic
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+X & \longmapsto & Y\\
+ & \nearrow\\
+u
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Here from the above, we have an independent variable 
+\begin_inset Formula $X$
+\end_inset
+
+ that affects 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+ We also have error terms 
+\begin_inset Formula $u$
+\end_inset
+
+ that are uncorrelated with 
+\begin_inset Formula $X$
+\end_inset
+
+.
+ In this situation, we can directly measure the causal impact of 
+\begin_inset Formula $X$
+\end_inset
+
+ on 
+\begin_inset Formula $Y$
+\end_inset
+
+ (change 
+\begin_inset Formula $X$
+\end_inset
+
+, see how it affects 
+\begin_inset Formula $Y$
+\end_inset
+
+).
+ Often times though, we have the following situation
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+X & \longmapsto & Y\\
+\uparrow & \nearrow\\
+u
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Formula $X$
+\end_inset
+
+ here still affects 
+\begin_inset Formula $Y$
+\end_inset
+
+ (and their causal relationship is what we are going after).
+ However, 
+\begin_inset Formula $X$
+\end_inset
+
+ is correlated with 
+\begin_inset Formula $u$
+\end_inset
+
+, so an increase in 
+\begin_inset Formula $u$
+\end_inset
+
+ can change 
+\begin_inset Formula $X$
+\end_inset
+
+, which further affects 
+\begin_inset Formula $Y$
+\end_inset
+
+ (through direct effect on 
+\begin_inset Formula $Y$
+\end_inset
+
+ as well as through 
+\begin_inset Formula $X$
+\end_inset
+
+).
+ Depending on the relationhip of the independent variable and the error
+ terms (the omitted variables), we could overstate or understate the causal
+ impact of 
+\begin_inset Formula $X$
+\end_inset
+
+ on 
+\begin_inset Formula $Y$
+\end_inset
+
+ because the total changes in 
+\begin_inset Formula $Y$
+\end_inset
+
+ include changes from 
+\begin_inset Formula $u$
+\end_inset
+
+.
+ This is the main issue: 
+\begin_inset Formula $X$
+\end_inset
+
+ is correlated with the error term (omitted variables), so OLS estimate
+ for 
+\begin_inset Formula $X$
+\end_inset
+
+ will not be accuruate.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+Z\longrightarrow X & \longmapsto & Y\\
+\uparrow & \nearrow\\
+u
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+One particular way to solve this issue is through an instrumental variable
+ 
+\begin_inset Formula $Z$
+\end_inset
+
+, which has the property that it is uncorrelated with the error term 
+\begin_inset Formula $Cov(Z,u)=0$
+\end_inset
+
+, but directly influence 
+\begin_inset Formula $X$
+\end_inset
+
+ (
+\begin_inset Formula $Cov(Z,X)\neq0)$
+\end_inset
+
+.
+ Finally, 
+\begin_inset Formula $Z$
+\end_inset
+
+ is also related to 
+\begin_inset Formula $Y$
+\end_inset
+
+ (
+\begin_inset Formula $Cov(Z,Y)\neq0$
+\end_inset
+
+) but the way it affects 
+\begin_inset Formula $Y$
+\end_inset
+
+ is only through 
+\begin_inset Formula $X$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Why is this a good solution? Intuitively, if the impact of 
+\begin_inset Formula $Z$
+\end_inset
+
+ on 
+\begin_inset Formula $Y$
+\end_inset
+
+ is only through 
+\begin_inset Formula $X$
+\end_inset
+
+, then by changing 
+\begin_inset Formula $Z$
+\end_inset
+
+, we will see how pure changes in 
+\begin_inset Formula $X$
+\end_inset
+
+ (without 
+\begin_inset Formula $u$
+\end_inset
+
+ getting involved) would affect 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+ We essentially created an artificial environment where we separate out
+ the entanglement of 
+\begin_inset Formula $X,u$
+\end_inset
+
+ on 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Subsection*
+\noindent
+Example 1 (Borrowed From Mueller)
+\end_layout
+
+\begin_layout Standard
+The famous example is Steve Levitt’s (1997) attempt to answer the simple
+ but crucial question ‘If a city hires more policemen, will its crime rate
+ fall?’ – or, ‘do policemen do what they’re supposed to do, reduce crime?’
+ Note that this is a causal question: we don’t care about the correlation
+ between policemen and crime; we care about whether adding one more policeman
+ to a city will lower that city’s crime rate.
+ Being an economist, Levitt (and many before him) tried regressing (using
+ OLS), across US cities, ‘number of policemen per capita’ on ‘crimes committed
+ per year per capita’, controlling for a bunch of other variables that are
+ likely to affect crime rates (socioeconomic and demographic factors, and
+ policy variables like other types of social spending, welfare programmes,
+ education spending and levels, and unemployment rates).
+ 
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+We’d expect a negative sign for the coefficient on policemen: more policemen,
+ all else equal, must reduce crime rates.
+ But in his data, as in a majority of studies before his, the coefficient
+ was positive.
+ OLS results are typically interpreted by economists as causal parameters
+ (this is why we use OLS – we’re interested in causation).
+ So all of these studies suggest, if you believe them, that if you hire
+ more police, crime rates will rise.
+ The obvious policy advice for raising crime is to fire all the policemen.
+ 
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Something is clearly wrong.
+ As we know, 
+\series bold
+\color blue
+OLS goes wrong when there is measurement error, omitted variable bias, or
+ endogeneity
+\series default
+\color inherit
+ (meaning reverse causation).
+ Here, the problem is almost definitely endogeneity, rather than ME (not
+ hard to measure crime or police force) or OVB (he put extensive control
+ variables in the model).
+ Intuitively, the problem is that as soon as crime rates go up (or are expected
+ to go up) the city will hire more police.
+ So you can see the endogeneity (reverse causality): policemen reduce crime
+ (that’s the causation we’re looking for), and crime increases policemen
+ (this is a sort of ‘nuisance causation’).
+ OLS results are biased in the presence of reverse causality – often very
+ badly biased, to the extent of taking the wrong sign as we see here.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Levitt’s paper is famous for suggesting a good instrument for this problem.
+ This good instrument must be (i) correlated with policemen, and (ii) not
+ correlated with the error in the regression equation.
+ His proposal was to use the timing of the electoral cycle, or simply whether
+ or not there was a mayoral election in the city that year.
+ This might sound crazy, because here is an economist thinking about politics
+ – but, in fact, the best instruments are often crazy.
+ The very nature of condition (ii) is that a good IV has to be something
+ that has nothing to do with one of the two variables we’re interested in.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+First, he shocked anyone who thinks US mayors are benevolent by showing
+ that there is a positive correlation between mayoral elections and police
+ hiring (mayors crank up the number of policemen on the beat in an election
+ year).
+ So condition (i) 
+\begin_inset Formula $Cov(Z,X)\neq0$
+\end_inset
+
+ was proven.
+ As always, condition (i) is easy to check.
+ The IV won’t even begin to work if condition (i) isn’t satisfied.
+ Now think about condition (ii).
+ This is always the hard one to think about, and to verify in practice.
+ In fact, it’s impossible to verify using the data because you’d have to
+ check the correlation between something observable (the IV) and something
+ imaginary (the error term), which you obviously can’t do.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There are two reasons why the IV might fail: (i) the IV itself is an omitted
+ variable (so it's directly in the error term), or that (ii) IV is correlated
+ with an ommited variable.
+ It's unlikely election year will directly impact crime, so (i) cannot be
+ the reason why IV might fail.
+ For (ii), all the things that might affect crime is pretty much controlled
+ for, so it's hard to see IV correlating with an omitted variable.
+ Therefore, we are forced to conclude that election year is a good instrument
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+of course, all these are open to debates, it's not an exact science.
+ Nevertheless, this is a good example of the application of IV.
+\end_layout
+
+\begin_layout Subsection*
+\noindent
+Example 2
+\end_layout
+
+\begin_layout Standard
+Angrist on Education (5 year old v.s.
+ 6 year olds of the same grade)
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+log(wage_{i}) & = & \alpha+\beta edu_{i}+\left(\gamma Ability_{i}+\epsilon_{i}\right)\\
+ & = & \alpha+\beta edu_{i}+v_{i}\\
+ &  & Z\nearrow
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $v_{i}$
+\end_inset
+
+ captures innate abilities which we do not observed.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+The idea is look for a 
+\begin_inset Formula $Z$
+\end_inset
+
+ such that it is related to 
+\begin_inset Formula $edu_{i}$
+\end_inset
+
+ but not innate 
+\begin_inset Formula $ability_{i}$
+\end_inset
+
+.
+ Angrist look at the quarter which a kid is born.
+ If you are born in Q4, then on average you spend 
+\begin_inset Formula $5\frac{3}{4}$
+\end_inset
+
+ years in school, while for those who are born on 
+\begin_inset Formula $Q1$
+\end_inset
+
+, their average time spent is 
+\begin_inset Formula $6\frac{3}{4}$
+\end_inset
+
+, so people who born on Q1 spend more time in school.
+ However, which quarter you are born is unlikely to be correlated wiht abilities.
+ <See the graph for illustration>.
+\end_layout
+
+\begin_layout Subsection*
+\noindent
+Skeleton
+\end_layout
+
+\begin_layout Standard
+Based on the intution example above, we can think of 
+\begin_inset Formula $\beta_{IV}$
+\end_inset
+
+ (as we wrote before):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\beta_{IV} & = & \frac{dy/dz}{dx/dz}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+This can be informally thought of what IV is doing.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+More formally, the mental model should be the following:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+Y & = & \alpha+\beta X+\epsilon\\
+ &  & Z\nearrow
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finding a good instrument 
+\begin_inset Formula $Z$
+\end_inset
+
+ is at the heart of IV methods (in fact, a lot of applied econometrics work
+ is about showing why a particular thing might be a good instrument).
+ Below is the skeleton of having a good instrument:
+\end_layout
+
+\begin_layout Itemize
+The instrument 
+\begin_inset Formula $Z$
+\end_inset
+
+ has a causal effect on the variable whose effect on 
+\begin_inset Formula $Y$
+\end_inset
+
+ we are trying capture.
+ This means 
+\begin_inset Formula $Cov(Z,X)\neq0$
+\end_inset
+
+.
+ A lot of time, we might have weak instrument, so 
+\begin_inset Formula $Cov(Z,X)\sim0$
+\end_inset
+
+.
+ This is a bad situation to be in, as it would blow up our IV estimate.
+\end_layout
+
+\begin_layout Itemize
+The instrument 
+\begin_inset Formula $Z$
+\end_inset
+
+ has to be uncorrelated with the error term, so 
+\begin_inset Formula $Cov(Z,u)=0$
+\end_inset
+
+.
+ This is really hard to prove: In the above example, we had to argument
+ that this is the case.
+\end_layout
+
+\begin_layout Standard
+Concretely, 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+Cov(Z,Y) & = & Cov(Z,\:\alpha+\beta X+\epsilon)\\
+ & = & Cov(Z,\alpha)+\beta Cov(Z,X)+Cov(Z,\epsilon)\\
+\beta_{IV} & = & \frac{Cov(Z,Y)}{Cov(Z,X)}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Provided that 
+\begin_inset Formula $Cov(Z,\epsilon)=0$
+\end_inset
+
+ and 
+\begin_inset Formula $Cov(Z,X)\neq0$
+\end_inset
+
+.
+ It turns out that 
+\begin_inset Formula $\beta_{OLS}$
+\end_inset
+
+ is biased and inconsistent, while 
+\begin_inset Formula $\beta_{IV}$
+\end_inset
+
+ is biased but consistent.
+\end_layout
+
+\begin_layout Subsubsection*
+Speical Case 
+\end_layout
+
+\begin_layout Standard
+A leading simple example of IV is one where the instrument z is a binary
+ instrument.
+ Denote the sub-sample averages of 
+\begin_inset Formula $y$
+\end_inset
+
+ and 
+\begin_inset Formula $x$
+\end_inset
+
+ by 
+\begin_inset Formula $\bar{y}_{1}$
+\end_inset
+
+ and 
+\begin_inset Formula $\bar{x}_{1}$
+\end_inset
+
+ when 
+\begin_inset Formula $z=1$
+\end_inset
+
+ and by 
+\begin_inset Formula $\bar{y_{0}}$
+\end_inset
+
+ and 
+\begin_inset Formula $\bar{x}_{0}$
+\end_inset
+
+ when 
+\begin_inset Formula $z=0$
+\end_inset
+
+.
+ Then 
+\begin_inset Formula $\frac{\Delta y}{\Delta z}=\frac{\bar{y}_{1}-\bar{y}_{0}}{1-0}$
+\end_inset
+
+ and 
+\begin_inset Formula $\frac{\Delta x}{\Delta z}=\frac{\bar{x}_{1}-\bar{x}_{0}}{1-0}$
+\end_inset
+
+ (think about slope), so we have:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\beta_{IV} & = & \frac{dy/dz}{dx/dz}=\frac{\bar{y}_{1}-\bar{y}_{0}}{\bar{x}_{1}-\bar{x}_{0}}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This estimator is also called the wald esitmator.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+Two Stage Least Square (2SLS)
+\end_layout
+
+\begin_layout Standard
+It can be shown that, under certain conditions(?), 2SLS gives us the the
+ IV estimator.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+Y & = & \alpha+\beta X+\epsilon\\
+X & = & \alpha'+\beta'Z+v
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+The idea is to first fit 
+\begin_inset Formula $\hat{X}$
+\end_inset
+
+ from the second equation, and regress 
+\begin_inset Formula $Y$
+\end_inset
+
+ on 
+\begin_inset Formula $\hat{X}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+More Reference:
+\end_layout
+
+\begin_layout Standard
+There are more readings you can find from this 
+\begin_inset CommandInset href
+LatexCommand href
+name "UC Davis Econ paper"
+target "http://cameron.econ.ucdavis.edu/e240a/ch04iv.pdf"
+
+\end_inset
+
+.
+ For more detailed math on consistency and bias, check out the YouTube video,
+ and for intuition, read this 
+\begin_inset CommandInset href
+LatexCommand href
+name "paper"
+target "http://people.ds.cam.ac.uk/ka323/teaching/devt2011/Extra/Mueller.pdf"
+
+\end_inset
+
+.
+\end_layout
+
 \end_body
 \end_document
