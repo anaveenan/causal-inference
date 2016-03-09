@@ -2350,5 +2350,505 @@ target "http://people.ds.cam.ac.uk/ka323/teaching/devt2011/Extra/Mueller.pdf"
 .
 \end_layout
 
+\begin_layout Section*
+\noindent
+Regression Discontinuity Designs (RD)
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+\color blue
+Key Idea
+\series default
+: Regression Discontinuity Designs exploit the fact that some rules are
+ quite arbitrary and therefore provide good quasi-experiments when you compare
+ people (or cities, firms, countries,...) who are just affected by the rule
+ with people who are just not affected by the rule.
+ Generally speaking, there are two kinds of RD, sharp RD & Fuzzy RD.
+\end_layout
+
+\begin_layout Subsection*
+Sharp RD
+\end_layout
+
+\begin_layout Standard
+A classic example for RD is to study the effect of national merit scholarship
+ on students.
+ What is the causal impact of receiving this scholarship on students' future
+ prospectives? We cannot simply compare students who recieved v.s.
+ those who don't, because those who received are more likely to be more
+ hardworking, intelligent, and have higher innate ability to start with.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+An ingenious approach that was taken was to look at students who scores
+ right above the cutoff v.s.
+ those who scores just right below.
+ Those who scored above will receive the scholarship, and those who don't
+ will not.
+ The cruical idea here is that those who score near the cutoff presumably
+ have the same kind of skill sets, dilligence, and innate abilities.
+ Therefore, by looking at these students, the sharp cutoff automatically
+ created treatment & control group for us.
+ This is at the heart of quasi-experiment, or natural experiment.
+\end_layout
+
+\begin_layout Subsubsection*
+How It Differs From Regression
+\end_layout
+
+\begin_layout Standard
+In regression, an essential theme is to leverage matching to controlled
+ away many of the other confounding variables (using control covariates)
+ that might affect our 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+ This strategy compares treatment and control toucomes at particular values
+ of the control variables, in the hope that treatment assignment is as good
+ as random.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+In RD however, there is no value of the running variable at which we get
+ to observe both treatment and control observations.
+ The validity of RD turns on our willingness to extrapolate across values
+ near the boundary of the running variable, at least for values in the neighborh
+ood of the cutoff at which treatment switches on.
+\end_layout
+
+\begin_layout Subsubsection*
+Formulation
+\end_layout
+
+\begin_layout Standard
+A simple RD analysis, however, use something very similar to a regression
+ function
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+Y & = & \alpha+\rho D_{A}+\gamma A+\epsilon_{A}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $Y$
+\end_inset
+
+ here might be yearly income, 
+\begin_inset Formula $D_{A}$
+\end_inset
+
+ is the dummy variable representing whether a user received the scholarship,
+ and 
+\begin_inset Formula $A$
+\end_inset
+
+ is simply the test score which is used as a control variate.
+ The best way to think about this is to imagine if we were to plot 
+\begin_inset Formula $A$
+\end_inset
+
+ with respect ot 
+\begin_inset Formula $Y$
+\end_inset
+
+, we will (hopefully) see a huge jump right at the cutoff, and that gap
+ is captured by 
+\begin_inset Formula $\rho$
+\end_inset
+
+-- the treatment effect of the scholarship.
+ In other words, those who received scholarship are expect to have a bump
+ of 
+\begin_inset Formula $\rho$
+\end_inset
+
+in their salaries.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+Intuition on Why RD would work
+\end_layout
+
+\begin_layout Standard
+Why is 
+\begin_inset Formula $\rho$
+\end_inset
+
+a credible estimate of the causal effect of the scholarship? Should we not
+ control for other things? The OVB formula tells us that the difference
+ between the estimate of 
+\begin_inset Formula $\rho$
+\end_inset
+
+in this short regression (above) and the result of any longer regression
+ depend on the correlation between variables added to the long regression
+ and 
+\begin_inset Formula $D_{A}$
+\end_inset
+
+.
+ But since 
+\begin_inset Formula $D_{A}$
+\end_inset
+
+ is solely determined by 
+\begin_inset Formula $A$
+\end_inset
+
+ (and it's not correlated with other variables), assuming that the effect
+ of 
+\begin_inset Formula $A$
+\end_inset
+
+ on 
+\begin_inset Formula $Y$
+\end_inset
+
+ is captured by a linear function we can be sure that no OVB afflicts this
+ short regression.
+\end_layout
+
+\begin_layout Subsubsection*
+Times when Sharp RD might fail
+\end_layout
+
+\begin_layout Standard
+Nonlinearity is the number one issue here.
+ In fact, if the relationship is non-linear, we might errenously concluded
+ that there is a causal impact when all there is nonlinearity in the relationshi
+p of 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Parametric RD: 
+\series default
+include polynomial terms in the regression.
+ For example, instead of the formula above, we can model things as 
+\begin_inset Formula $Y=\alpha+\rho D_{A}+\beta_{1}A+\beta_{2}A^{2}+\epsilon_{A}$
+\end_inset
+
+ so that the functional form is more flexible, the general form can be thought
+ of as 
+\begin_inset Formula $Y=f(A)+\rho D_{A}+\epsilon_{A}$
+\end_inset
+
+ where 
+\begin_inset Formula $f(A)$
+\end_inset
+
+ can be a non-linear function of 
+\begin_inset Formula $A$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Nonparametric RD: 
+\series default
+Another approach exploits the fact that the problem of distinguishing jumps
+ from nonlinear trends grows less vexing as we zero in on points close to
+ the cutoff.
+ For the small set of points close to the boundary, nonlinear trends need
+ not concern us at all.
+ The math formula is 
+\begin_inset Formula $Y=\alpha+\rho D_{A}+\beta A+\epsilon_{A},\:\forall\:\text{samples}\in\mathcal{N}_{[-b,b]}(A)$
+\end_inset
+
+.
+ In R, you can simply run the usual regression with subset = the neighorhood
+ of interest.
+ Note.
+ There is obviously a bias-variance trade-off here.
+ The more you zoom in, the more you can remove nonlinearity (reduce bias),
+ but we have less data point (so variance is likely to go up).
+\end_layout
+
+\begin_layout Standard
+Finally, another powerful technique to validate results of RD is to look
+ at other cut (car death v.s.
+ internal death) to verify that the jump is due to our hypothesis, and not
+ other reasons.
+\end_layout
+
+\begin_layout Subsection*
+Fuzzy RD
+\end_layout
+
+\begin_layout Standard
+In a sharp RD design, once a subject past the cutoff, he/she will receive
+ the treatment with certainty.
+ Using probability parlance, it means that once the cutoff is crossed, the
+ probability of treatment is 
+\begin_inset Formula $1$
+\end_inset
+
+.
+ If the cutoff is not crossed, the probability of treatment is 0:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\lim_{z\downarrow z_{c}}E\left[D_{i}\vert Z=z_{c}\right]-\lim_{z\uparrow z_{c}}E\left[D_{i}\vert Z=z_{c}\right]=1-0=1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Alternatively:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+P(D_{i}=1\vert x_{i}) & = & \begin{cases}
+g_{o}(x_{i}) & if\:x_{i}\geq x_{0}\\
+g_{1}\left(x_{i}\right) & if\:x_{i}<x_{0}
+\end{cases},\text{where}\;g_{o}(x)\neq g_{1}(x)
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+In practice, this means that there is no cross-over.
+ As we have discussed earlier, parametric and non-parametric approaches
+ can be applied to estimate the treatment effect, and is identified at the
+ cutoff.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+In Fuzzy RD, the treatment assignment is not as clean.
+ There is a discontinuity in the probability of treatment around cutoff,
+ but it's not a 
+\begin_inset Formula $0$
+\end_inset
+
+ to 
+\begin_inset Formula $1$
+\end_inset
+
+ change.
+ In practice, this means treatment assignment is not always strictly enforced,
+ some individuals either 
+\begin_inset Quotes eld
+\end_inset
+
+cross over
+\begin_inset Quotes erd
+\end_inset
+
+ or did not 
+\begin_inset Quotes eld
+\end_inset
+
+show up
+\begin_inset Quotes erd
+\end_inset
+
+ for treatment.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Here is a picture that demonstrate this:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename fuzzy_RD.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+From the graphs above, we can see in the sharp design, there is no cross
+ over (If you are over the cutoff, you receive treatment, otherwise you
+ don't).
+ In Fuzzy RD, there is no such gaurantee -- There will be some degress of
+ cross over, so we need to take these into account.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+This sounds awfully like Instrumental variable technique, and in fact, it
+ is.
+ Here, the running variable 
+\begin_inset Formula $A$
+\end_inset
+
+ plays the role of the instrumental variable.
+ The assignment outcome 
+\begin_inset Formula $D$
+\end_inset
+
+ is a function of 
+\begin_inset Formula $A$
+\end_inset
+
+, but is not deterministic.
+ We also have our final outcome that we care about 
+\begin_inset Formula $Y$
+\end_inset
+
+.
+ The goal here is to understand the causal impact of 
+\begin_inset Formula $D$
+\end_inset
+
+ on 
+\begin_inset Formula $Y$
+\end_inset
+
+ through 
+\begin_inset Formula $A$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Hahn, Todd, and van der Klaauw (2001) show that when fuzziness occurs, the
+ local average treatment effect (LATE) may be inferred for the subset of
+ individuals who are induced into treatment at the cutoff.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\:$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+LATE is equivalent to the difference in mean outcomes for the treatment
+ and control groups (ITT estimate) divided by the difference in treatment
+ receipt rates for both groups within a close neighborhood around the cutoff.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\lim_{z\downarrow z_{c}}E\left[Y_{i}|Z=z\right]-\lim_{z\uparrow z_{c}}E\left[Y_{i}|Z=z\right]}{\lim_{z\downarrow z_{c}}E\left[D_{i}|Z=z\right]-\lim_{z\uparrow z_{c}}E\left[D_{i}|Z=z\right]}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the regression framework, this is estimated through a 2 stage least square
+ IV approach.
+ (Reading Mostly Harmless Econometrics might help here).
+\end_layout
+
 \end_body
 \end_document
